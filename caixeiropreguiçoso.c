@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#define L 30
+#define C 30
 
 int metodo;
 
-int veri(int X, int Y, int Z){
+int veri(int X, int Y, int Z)
+{
   //X = distância total, Y = distância até a cidade mais próxima, Z é o número da cidade atual
   int pode = 1;
 
@@ -37,11 +40,12 @@ int veri(int X, int Y, int Z){
 }
 
 
-int andar(int Matriz[L][C], int cidade_inicial){
-  
+int andar(int Matriz[L][C], int cidade_inicial)
+{
+
   int percurso[L];
   for (int x = 0; x<L; x++){percurso[x] = -1;}
-  
+
   int len_atual = 0, distancia_total = 0;
   percurso[0] = cidade_inicial;
 
@@ -50,13 +54,13 @@ int andar(int Matriz[L][C], int cidade_inicial){
     if (len_atual == (L-1)){break;}
 
     int pode = 0;
-    
+
     int cidade_mais_proxima[2]; cidade_mais_proxima[1] = 2000;
 
     for (int l = 0; l < L; l++){
       for (int c = 0; c < C; c++){
         for (int per = 0; (percurso[per] != -1) || (per < L); per++)
-          if (Matriz[l][c]!= 0){ 
+          if (Matriz[l][c]!= 0){
             if (len_atual == 0){
               if (Matriz[l][c] < cidade_mais_proxima[1]){
                 cidade_mais_proxima[1] = Matriz[l][c];
@@ -73,9 +77,9 @@ int andar(int Matriz[L][C], int cidade_inicial){
           }
         }
       }
-    
+
       pode = veri(distancia_total, cidade_mais_proxima[1], cidade_mais_proxima[0]);
-  
+
       if (pode == 1){
       len_atual ++;
       distancia_total += cidade_mais_proxima[1];
@@ -87,7 +91,7 @@ int andar(int Matriz[L][C], int cidade_inicial){
         percurso[len_atual] = cidade_mais_proxima[0];
       }
   }
-  
+
   int pode = 0, cidade_mais_proxima[2];
 
   cidade_mais_proxima[0] = cidade_inicial;
@@ -105,5 +109,46 @@ int andar(int Matriz[L][C], int cidade_inicial){
 }
 
 
-int main(){}
+int main()
+{
+  int DIST[L][C], CIDADE[L], cidadeInicial;
 
+//Cidades e Diagonal Principal da Matriz
+  for(int i = 0; i < L; i++)
+  {
+    CIDADE[i] = i;
+    DIST[i][i] = 0; //Valores da diagonal principal = 0
+  }
+
+//Acima da Diagonal Princpal
+  for(int l = 0; l < L; l++)
+  {
+    for(int c = l + 1; c < C; c++)
+    {
+      printf("Distancia entre as cidades %d e %d:\n", CIDADE[l], CIDADE[c]);
+      scanf("%d", &DIST[l][c]); //Receber distancias
+    }
+  }
+
+//Printar e espelhar a parte de cima da matriz pra parte de baixo
+  for(int l = 0; l < L; l++)
+  {
+    for(int c = 0; c < C; c++)
+    {
+      DIST[c][l] = DIST[l][c]; //Espelhar
+      //printf("%d ", DIST[c][l]); //Printar a matriz caso queira
+    }
+    //printf("\n"); //Printar a matriz caso queira
+  }
+
+//Cidade Inicial
+  printf("\nEm qual cidade voce ira comecar?\n");
+  scanf("%d", &cidadeInicial);
+  cidadeInicial = CIDADE[cidadeInicial];
+
+//Metodo
+  printf("\nQual metodo voce vai usar?\n");
+  printf("[0] Distancia\n");
+  printf("[1] Tempo\n");
+  scanf("%d", &metodo);
+}
