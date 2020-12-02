@@ -37,25 +37,25 @@ int veri(int X, int Y, int Z){
 }
 
 
-int andar(int Matriz[30][30], int cidade_inicial){
+int andar(int Matriz[L][C], int cidade_inicial){
   
-  int percurso[30];
-  for (int x = 0; x<30; x++){percurso[x] = -1;}
+  int percurso[L];
+  for (int x = 0; x<L; x++){percurso[x] = -1;}
   
   int len_atual = 0, distancia_total = 0;
   percurso[0] = cidade_inicial;
 
   for(;;){
 
-    if (len_atual == 29){break;}
+    if (len_atual == (L-1)){break;}
 
     int pode = 0;
     
     int cidade_mais_proxima[2]; cidade_mais_proxima[1] = 2000;
 
-    for (int l = 0; l < 30; l++){
-      for (int c = 0; c < 30; c++){
-        for (int per = 0; (percurso[per] != -1) || (per < 30); per++)
+    for (int l = 0; l < L; l++){
+      for (int c = 0; c < C; c++){
+        for (int per = 0; (percurso[per] != -1) || (per < L); per++)
           if (Matriz[l][c]!= 0){ 
             if (len_atual == 0){
               if (Matriz[l][c] < cidade_mais_proxima[1]){
