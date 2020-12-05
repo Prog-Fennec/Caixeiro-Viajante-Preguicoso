@@ -19,93 +19,63 @@ int veri(int X, int Y, int Z)
     printf("O caixeiro descansou na cidade %d\n", Z);
     pode = 0;
     sleep(1);
-    printf("Z");
-    sleep(1);
-    printf("Z");
-    sleep(1);
-    printf("Z\n");
+    printf("ZZZ\n");
   }
   else if (metodo == 1 && timeSimu > 12){
     printf("O caixeiro descansou na cidade %d\n", Z);
     pode = 0;
     sleep(1);
-    printf("Z");
-    sleep(1);
-    printf("Z");
-    sleep(1);
-    printf("Z\n");
+    printf("ZZZ\n");
   }
 
   return pode;
 }
 
 
-int andar(int Matriz[L][C], int cidade_inicial)
-{
+void andar(int Matriz[L][C], int cidade_inicial){
 
   int percurso[L];
-  for (int x = 0; x<L; x++){percurso[x] = -1;}
-
-  int len_atual = 0, distancia_total = 0;
+  for (int x = 0; x<L;x++){percurso[x]=-1;}
   percurso[0] = cidade_inicial;
 
-  for(;;){
+  int CMP[2];
 
-    if (len_atual == (L-1)){break;}
+  int vai = 0, contador = 0, pode, dist = 0;
 
-    int pode = 0;
+  int CP[L]; for (int n = 0; n < L; n++){CP[n] = 0;}
+  CP[cidade_inicial] = 1;
+  
+  while (1){ 
 
-    int cidade_mais_proxima[2]; cidade_mais_proxima[1] = 2000;
+    CMP[1] = 2000;
 
-    for (int l = 0; l < L; l++){
-      for (int c = 0; c < C; c++){
-        for (int per = 0; (percurso[per] != -1) || (per < L); per++)
-          if (Matriz[l][c]!= 0){
-            if (len_atual == 0){
-              if (Matriz[l][c] < cidade_mais_proxima[1]){
-                cidade_mais_proxima[1] = Matriz[l][c];
-                if (l == percurso[len_atual]){cidade_mais_proxima[0] = l;}
-                if (c == percurso[len_atual]){cidade_mais_proxima[0] = c;}
-              }
-            }else if((l != percurso[per]) && (c != percurso[per])){
-              if (Matriz[l][c] < cidade_mais_proxima[1]){
-                cidade_mais_proxima[1] = Matriz[l][c];
-                if (l == percurso[len_atual]){cidade_mais_proxima[0] = l;}
-                if (c == percurso[len_atual]){cidade_mais_proxima[0] = c;}
-              }
-            }
-          }
+    for (int c =  0; c<C; c++) {
+
+      if (CP[c] == 0){
+        if (Matriz[percurso[contador]][c] < CMP[1]){
+          CMP[1] = Matriz[percurso[contador]][c];
+          CMP[0] = c;
         }
       }
 
-      pode = veri(distancia_total, cidade_mais_proxima[1], cidade_mais_proxima[0]);
+    }
 
-      if (pode == 1){
-      len_atual ++;
-      distancia_total += cidade_mais_proxima[1];
-      percurso[len_atual] = cidade_mais_proxima[0];
-      }else{
-        distancia_total = 0;
-        len_atual ++;
-        distancia_total += cidade_mais_proxima[1];
-        percurso[len_atual] = cidade_mais_proxima[0];
-      }
+  pode = veri(dist, CMP[1], percurso[contador]);
+  contador++;
+  percurso[contador] = CMP[0];
+  if (pode == 0){dist = 0;}
+  dist += CMP[1];
+  CP[CMP[0]] = 1;
+  if (contador == L-1){break;}
+
   }
 
-  int pode = 0, cidade_mais_proxima[2];
-
-  cidade_mais_proxima[0] = cidade_inicial;
-  cidade_mais_proxima[1] = Matriz[percurso[len_atual]][cidade_mais_proxima[0]];
-
-  pode = veri(distancia_total, cidade_mais_proxima[1], cidade_mais_proxima[0]);
-
-  printf("O trajeto terminou!\nO caixeiro pelas cidades:\n");
-  for (int i = 0; i < 30; i++){
-    printf("%d -> ", percurso[i]);
+  pode = veri(dist, CMP[1], percurso[contador]);
+  printf("A jornada do caixeiro preguiçoso acabou!\nEle passou pelas cidades:\n");
+  for (int n = 0; n < L; n++){
+    printf("%d -> ", percurso[n]);
   }
   printf("%d\n", cidade_inicial);
-
-  return 1;
 }
 
 
@@ -151,4 +121,7 @@ int main()
   printf("[0] Distancia\n");
   printf("[1] Tempo\n");
   scanf("%d", &metodo);
+
+  andar(DIST, cidadeInicial);
+
 }
